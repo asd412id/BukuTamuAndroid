@@ -9,12 +9,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
+    SharedPreferences configs;
     String _token;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SharedPreferences configs;
         configs = getApplicationContext().getSharedPreferences("configs",MODE_PRIVATE);
         _token = configs.getString("_token","");
 
@@ -24,11 +24,16 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent;
                 if (_token.equals("")){
                     intent = new Intent(MainActivity.this, RegistrationActivity.class);
-                    startActivity(intent);
-                    finishAffinity();
                 }else {
-                    Toast.makeText(MainActivity.this,_token,Toast.LENGTH_LONG).show();
+                    String getInstansi = configs.getString("guest",null);
+                    if (getInstansi==null){
+                        intent = new Intent(MainActivity.this, HomeActivity.class);
+                    }else{
+                        intent = new Intent(MainActivity.this, RatingActivity.class);
+                    }
                 }
+                startActivity(intent);
+                finishAffinity();
             }
         },2500);
     }

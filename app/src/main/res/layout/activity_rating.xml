@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:background="@drawable/background"
+    android:orientation="vertical"
+    android:paddingTop="30dp"
+    android:paddingHorizontal="15dp"
+    tools:context=".RatingActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhite"
+        android:padding="15dp"
+        android:elevation="3dp">
+
+        <RelativeLayout
+            android:id="@+id/closeWrap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:paddingBottom="10dp"
+            tools:ignore="RtlHardcoded">
+
+            <Button
+                android:id="@+id/btnDismiss"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/ic_close"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/gtitle"
+            android:layout_below="@id/closeWrap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Silahkan Pilih Rating dan Mengisi Kesan Anda Terhadap Kualitas Pelayanan di"
+            android:textAlignment="center"
+            android:layout_gravity="center_horizontal"
+            android:textSize="19sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"/>
+
+        <TextView
+            android:id="@+id/instansi"
+            android:layout_below="@id/gtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="NAMA INSTANSI"
+            android:textAlignment="center"
+            android:layout_gravity="center_horizontal"
+            android:textSize="19sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"/>
+
+        <RelativeLayout
+            android:id="@+id/ratingWrap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/instansi"
+            android:layout_marginTop="15dp"
+            android:gravity="center">
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:stepSize="1"
+                android:theme="@style/RatingBar"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/ratingBarTextWrap"
+            android:layout_below="@id/ratingWrap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/ratingBarText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Rating Belum Dipilih"
+                android:textSize="19dp"
+                android:textAlignment="center"
+                android:layout_gravity="center_horizontal" />
+
+        </RelativeLayout>
+
+
+        <EditText
+            android:id="@+id/kesan"
+            android:layout_below="@id/ratingBarTextWrap"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:padding="15dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/edit_text"
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:hint="Bagaimana kesan anda setelah berkunjung?"
+            android:nextFocusForward="@id/btnSubmit"/>
+
+        <Button
+            android:id="@+id/btnSubmit"
+            android:layout_below="@id/kesan"
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:textSize="19sp"
+            android:text="kirim"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/colorWhite"
+            android:background="@drawable/button"/>
+        <Button
+            android:id="@+id/btnSnooze"
+            android:layout_below="@id/btnSubmit"
+            android:layout_width="match_parent"
+            android:layout_height="47dp"
+            android:textSize="19sp"
+            android:text="tunda dulu"
+            android:layout_marginTop="3dp"
+            android:textColor="@color/colorWhite"
+            android:background="@color/colorAccent"/>
+
+    </RelativeLayout>
+
+</androidx.core.widget.NestedScrollView>

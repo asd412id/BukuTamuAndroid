@@ -3,6 +3,7 @@ package com.asd412id.bukutamu;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -88,6 +89,10 @@ public class RegistrationActivity extends AppCompatActivity {
         editor.putString("alamat",alamat.getText().toString());
         editor.putString("_token",_token);
         editor.commit();
+        progressDialog.dismiss();
+        Intent intent = new Intent(this,HomeActivity.class);
+        startActivity(intent);
+        finishAffinity();
     }
 
     private JSONObject validateForm() {
