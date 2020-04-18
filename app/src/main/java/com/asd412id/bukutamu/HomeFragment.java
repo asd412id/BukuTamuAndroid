@@ -12,13 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
-import com.asd412id.bukutamu.R;
-import com.asd412id.bukutamu.ScanActivity;
 
 import static android.content.Context.MODE_PRIVATE;
 

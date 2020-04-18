@@ -1,17 +1,11 @@
 package com.asd412id.bukutamu;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.media.Rating;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -20,6 +14,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NoConnectionError;
@@ -215,7 +213,7 @@ public class RatingActivity extends AppCompatActivity {
                         try {
                             if (response.getString("status").equals("success")){
                                 JSONObject guest = response.getJSONObject("data");
-                                listHistory.put(guest);
+                                listHistory.put(listHistory.length()-1,guest);
                                 history_editor.putString("list", String.valueOf(listHistory));
                                 history_editor.commit();
                                 editor.remove("instansi");

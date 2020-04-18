@@ -21,8 +21,6 @@
         android:id="@+id/list_history"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/history_title"
-        android:divider="@color/colorPrimaryDark"
-        android:dividerHeight="1dp" />
+        android:layout_below="@id/history_title"/>
     
 </RelativeLayout>

@@ -2,12 +2,10 @@ package com.asd412id.bukutamu;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,27 +22,24 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class HistoryFragment extends Fragment {
 
-    SharedPreferences getHistory;
-    JSONArray dataHistory;
-    SimpleDateFormat format;
+    private JSONArray dataHistory;
+    private SimpleDateFormat format;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_history, container, false);
         ListView listHistory = root.findViewById(R.id.list_history);
-        format = new SimpleDateFormat("dd-mm-yyyy H:m");
 
-        getHistory = getActivity().getApplicationContext().getSharedPreferences("history", Context.MODE_PRIVATE);
+        SharedPreferences getHistory = getActivity().getApplicationContext().getSharedPreferences("history", Context.MODE_PRIVATE);
 
         try {
             dataHistory = new JSONArray(getHistory.getString("list", String.valueOf(new JSONArray())));
@@ -54,8 +49,10 @@ public class HistoryFragment extends Fragment {
 
         ArrayList<String> data = new ArrayList<>();
 
+        dataHistory = sortJsonArray(dataHistory);
+
         if (dataHistory.length()>0){
-            for (int i=0;i<dataHistory.length();i++){
+            for (int i = 0; i < dataHistory.length();i++){
                 try {
                     JSONObject item = (JSONObject) dataHistory.get(i);
                     String[] waktu = item.getString("start_visit").split(" ");
@@ -71,9 +68,8 @@ public class HistoryFragment extends Fragment {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     try {
                         JSONObject item = (JSONObject) dataHistory.get(position);
-                        Log.i("TG", String.valueOf(item));
                         String bersama = "";
-                        if (item.getString("anggota").trim().length()>1){
+                        if (item.has("anggota") && !item.isNull("anggota")){
                             bersama = "<br><br><strong><u>Bersama dengan:</u></strong><br>" +
                                     item.getJSONArray("anggota").join("<br>").replace("\"","");
                         }
@@ -98,7 +94,6 @@ public class HistoryFragment extends Fragment {
                 }
             });
         }else {
-            listHistory.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             data.add("Tidak ada riwayat kunjungan!");
         }
 
@@ -106,5 +101,33 @@ public class HistoryFragment extends Fragment {
         listHistory.setAdapter(adapter);
 
         return root;
+    }
+
+    private static JSONArray sortJsonArray(JSONArray array) {
+        List<JSONObject> jsons = new ArrayList<>();
+        for (int i = 0; i < array.length(); i++) {
+            try {
+                jsons.add(array.getJSONObject(i));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        Collections.sort(jsons, new Comparator<JSONObject>() {
+            @Override
+            public int compare(JSONObject lhs, JSONObject rhs) {
+                String lid = null;
+                String rid = null;
+                try {
+                    lid = lhs.getString("id");
+                    rid = rhs.getString("id");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                assert lid != null;
+                assert rid != null;
+                return rid.compareTo(lid);
+            }
+        });
+        return new JSONArray(jsons);
     }
 }
