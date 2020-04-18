@@ -30,6 +30,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -40,6 +41,9 @@ import java.util.Objects;
 public class RatingActivity extends AppCompatActivity {
     SharedPreferences configs;
     SharedPreferences.Editor editor;
+    SharedPreferences getHistory;
+    SharedPreferences.Editor history_editor;
+    JSONArray listHistory;
     String api = "/api/v1/";
     ProgressDialog progressDialog;
     RatingBar ratingBar;
@@ -57,6 +61,19 @@ public class RatingActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this,ProgressDialog.THEME_HOLO_LIGHT);
         configs = getApplicationContext().getSharedPreferences("configs", Context.MODE_PRIVATE);
         editor = configs.edit();
+
+        getHistory = getApplicationContext().getSharedPreferences("history", Context.MODE_PRIVATE);
+        history_editor = getHistory.edit();
+
+        try {
+            if (getHistory.getString("list",null)!=null){
+                listHistory = new JSONArray(getHistory.getString("list",null));
+            }else{
+                listHistory = new JSONArray();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         instansi = findViewById(R.id.instansi);
         ratingBar = findViewById(R.id.ratingBar);
@@ -194,9 +211,13 @@ public class RatingActivity extends AppCompatActivity {
                 JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, uri, null, new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+                        progressDialog.dismiss();
                         try {
                             if (response.getString("status").equals("success")){
-                                progressDialog.dismiss();
+                                JSONObject guest = response.getJSONObject("data");
+                                listHistory.put(guest);
+                                history_editor.putString("list", String.valueOf(listHistory));
+                                history_editor.commit();
                                 editor.remove("instansi");
                                 editor.remove("guest");
                                 editor.apply();
@@ -221,8 +242,8 @@ public class RatingActivity extends AppCompatActivity {
                     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        progressDialog.dismiss();
                         if (error instanceof NoConnectionError){
-                            progressDialog.dismiss();
                             AlertDialog.Builder builder = new AlertDialog.Builder(RatingActivity.this);
                             builder.setTitle("Error")
                                     .setMessage("Jaringan Bermasalah!")
@@ -235,7 +256,6 @@ public class RatingActivity extends AppCompatActivity {
                             AlertDialog dialog = builder.create();
                             dialog.show();
                         }else if (error.networkResponse!=null && error.networkResponse.data!=null){
-                            progressDialog.dismiss();
                             VolleyError volleyError = new VolleyError(new String(error.networkResponse.data));
                             try {
                                 JSONObject errorJson = new JSONObject(Objects.requireNonNull(volleyError.getMessage()));
@@ -251,6 +271,17 @@ public class RatingActivity extends AppCompatActivity {
                                 AlertDialog dialog = builder.create();
                                 dialog.show();
                             } catch (JSONException e) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(RatingActivity.this);
+                                builder.setTitle("Error")
+                                        .setMessage("Jaringan Bermasalah!")
+                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                            }
+                                        });
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
                                 e.printStackTrace();
                             }
                         }

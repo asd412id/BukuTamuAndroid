@@ -1,4 +1,4 @@
-package com.asd412id.bukutamu.ui.home;
+package com.asd412id.bukutamu;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

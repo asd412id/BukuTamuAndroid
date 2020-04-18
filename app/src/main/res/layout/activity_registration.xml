@@ -9,105 +9,120 @@
     android:gravity="center"
     tools:context=".RegistrationActivity">
 
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="BUKU TAMU"
-        android:textAlignment="center"
-        android:textSize="30sp"
-        android:textColor="@color/colorWhite"
-        android:textStyle="bold"
-        android:layout_marginBottom="30dp"
-        android:layout_gravity="center_horizontal" />
+        android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorWhite"
-        android:paddingHorizontal="15dp"
-        android:paddingVertical="15dp"
-        android:elevation="3dp">
-
-        <TextView
-            android:id="@+id/loginTitle"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Isi Biodata Anda"
-            android:textAlignment="center"
-            android:layout_gravity="center_horizontal"
-            android:textSize="21sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimaryDark"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_gravity="center">
 
-        <EditText
-            android:id="@+id/nama"
-            android:layout_below="@id/loginTitle"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:paddingHorizontal="15dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/edit_text"
-            android:inputType="text"
-            android:hint="Nama Lengkap"
-            android:nextFocusForward="@id/pekerjaan"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="BUKU TAMU"
+                android:textAlignment="center"
+                android:textSize="30sp"
+                android:textColor="@color/colorWhite"
+                android:textStyle="bold"
+                android:layout_marginBottom="30dp"
+                android:layout_gravity="center_horizontal" />
 
-        <EditText
-            android:id="@+id/pekerjaan"
-            android:layout_below="@id/nama"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:paddingHorizontal="15dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/edit_text"
-            android:inputType="text"
-            android:hint="Pekerjaan"
-            android:nextFocusForward="@id/telp"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:paddingHorizontal="15dp"
+                android:paddingVertical="15dp"
+                android:elevation="3dp">
 
-        <EditText
-            android:id="@+id/telp"
-            android:layout_below="@id/pekerjaan"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:paddingHorizontal="15dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/edit_text"
-            android:inputType="phone"
-            android:hint="Nomor Handphone"
-            android:nextFocusForward="@id/alamat"/>
+                <TextView
+                    android:id="@+id/loginTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Isi Biodata Anda"
+                    android:textAlignment="center"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="21sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimaryDark"/>
 
-        <EditText
-            android:id="@+id/alamat"
-            android:layout_below="@id/telp"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:padding="15dp"
-            android:layout_marginTop="5dp"
-            android:background="@drawable/edit_text"
-            android:gravity="top"
-            android:inputType="text"
-            android:hint="Alamat"
-            android:nextFocusForward="@id/btnSubmit"/>
+                <EditText
+                    android:id="@+id/nama"
+                    android:layout_below="@id/loginTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:paddingHorizontal="15dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/edit_text"
+                    android:inputType="text"
+                    android:hint="Nama Lengkap"
+                    android:nextFocusForward="@id/pekerjaan"/>
 
-        <Button
-            android:id="@+id/btnSubmit"
-            android:layout_below="@id/alamat"
-            android:layout_width="match_parent"
-            android:layout_height="47dp"
-            android:textSize="19sp"
-            android:text="SIMPAN"
-            android:layout_marginTop="15dp"
-            android:textColor="@color/colorWhite"
-            android:background="@drawable/button"/>
+                <EditText
+                    android:id="@+id/pekerjaan"
+                    android:layout_below="@id/nama"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:paddingHorizontal="15dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/edit_text"
+                    android:inputType="text"
+                    android:hint="Pekerjaan"
+                    android:nextFocusForward="@id/telp"/>
 
-    </RelativeLayout>
+                <EditText
+                    android:id="@+id/telp"
+                    android:layout_below="@id/pekerjaan"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:paddingHorizontal="15dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/edit_text"
+                    android:inputType="phone"
+                    android:hint="Nomor Handphone"
+                    android:nextFocusForward="@id/alamat"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="created by asd412id"
-        android:textColor="@color/colorWhite"
-        android:textAlignment="center"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="15dp"/>
+                <EditText
+                    android:id="@+id/alamat"
+                    android:layout_below="@id/telp"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:padding="15dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/edit_text"
+                    android:gravity="top"
+                    android:inputType="text"
+                    android:hint="Alamat"
+                    android:nextFocusForward="@id/btnSubmit"/>
+
+                <Button
+                    android:id="@+id/btnSubmit"
+                    android:layout_below="@id/alamat"
+                    android:layout_width="match_parent"
+                    android:layout_height="47dp"
+                    android:textSize="19sp"
+                    android:text="SIMPAN"
+                    android:layout_marginTop="15dp"
+                    android:textColor="@color/colorWhite"
+                    android:background="@drawable/button"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="created by asd412id"
+                android:textColor="@color/colorWhite"
+                android:textAlignment="center"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="15dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

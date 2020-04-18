@@ -34,6 +34,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.zxing.Result;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,6 +51,9 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
     private ZXingScannerView mScannerView;
     SharedPreferences configs;
     SharedPreferences.Editor editor;
+    SharedPreferences getHistory;
+    SharedPreferences.Editor history_editor;
+    JSONArray listHistory;
     String api = "/api/v1/";
     String instansi;
     ProgressDialog progressDialog;
@@ -71,6 +75,18 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
 
         configs = getApplicationContext().getSharedPreferences("configs", Context.MODE_PRIVATE);
         editor = configs.edit();
+        getHistory = getApplicationContext().getSharedPreferences("history", Context.MODE_PRIVATE);
+        history_editor = getHistory.edit();
+
+        try {
+            if (getHistory.getString("list",null)!=null){
+                listHistory = new JSONArray(getHistory.getString("list",null));
+            }else{
+                listHistory = new JSONArray();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         mScannerView = new ZXingScannerView(this);
         setContentView(mScannerView);
@@ -117,12 +133,11 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, uri, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                progressDialog.dismiss();
                 try {
                     if (response.getString("status").equals("connected")){
-                        editor.putString("url",url);
-                        editor.commit();
-                        progressDialog.dismiss();
                         JSONObject instansi = response.getJSONObject("data");
+                        editor.putString("url",url);
                         editor.putString("instansi", String.valueOf(instansi));
                         editor.commit();
                         serverFound(instansi);
@@ -135,6 +150,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
                 if (error instanceof NoConnectionError){
                     serverNotFound("Server tidak ditemukan!");
                 }else if (error.networkResponse!=null && error.networkResponse.data!=null){
@@ -143,6 +159,17 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                         JSONObject errorJson = new JSONObject(Objects.requireNonNull(volleyError.getMessage()));
                         serverNotFound(errorJson.getString("message"));
                     } catch (JSONException e) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
+                        builder.setTitle("Error")
+                                .setMessage("Jaringan Bermasalah!")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
                         e.printStackTrace();
                     }
                 }
@@ -252,10 +279,13 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, uri, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                progressDialog.dismiss();
                 try {
                     if (response.getString("status").equals("success")){
-                        progressDialog.dismiss();
                         JSONObject guest = response.getJSONObject("data");
+                        listHistory.put(guest);
+                        history_editor.putString("list", String.valueOf(listHistory));
+                        history_editor.commit();
                         editor.putString("guest", String.valueOf(guest));
                         editor.commit();
                         Intent intent = new Intent(ScanActivity.this,RatingActivity.class);
@@ -270,8 +300,8 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
             @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onErrorResponse(VolleyError error) {
+                progressDialog.dismiss();
                 if (error instanceof NoConnectionError){
-                    progressDialog.dismiss();
                     AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
                     builder.setTitle("Error")
                             .setMessage("Jaringan Bermasalah!")
@@ -284,7 +314,6 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                     AlertDialog dialog = builder.create();
                     dialog.show();
                 }else if (error.networkResponse!=null && error.networkResponse.data!=null){
-                    progressDialog.dismiss();
                     VolleyError volleyError = new VolleyError(new String(error.networkResponse.data));
                     try {
                         JSONObject errorJson = new JSONObject(Objects.requireNonNull(volleyError.getMessage()));
@@ -300,6 +329,17 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                         AlertDialog dialog = builder.create();
                         dialog.show();
                     } catch (JSONException e) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ScanActivity.this);
+                        builder.setTitle("Error")
+                                .setMessage("Jaringan Bermasalah!")
+                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                        AlertDialog dialog = builder.create();
+                        dialog.show();
                         e.printStackTrace();
                     }
                 }
@@ -335,7 +375,6 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
     }
 
     private void serverNotFound(String msg) {
-        progressDialog.dismiss();
         Intent intent = new Intent(this,HomeActivity.class);
         intent.putExtra("err",msg);
         startActivity(intent);

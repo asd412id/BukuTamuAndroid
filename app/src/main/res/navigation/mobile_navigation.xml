@@ -7,14 +7,14 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.asd412id.bukutamu.ui.home.HomeFragment"
+        android:name="com.asd412id.bukutamu.HomeFragment"
         android:label="@string/menu_beranda"
         tools:layout="@layout/fragment_home">
     </fragment>
 
     <fragment
         android:id="@+id/nav_history"
-        android:name="com.asd412id.bukutamu.ui.history.HistoryFragment"
+        android:name="com.asd412id.bukutamu.HistoryFragment"
         android:label="@string/menu_history"
         tools:layout="@layout/fragment_history" />
 </navigation>
